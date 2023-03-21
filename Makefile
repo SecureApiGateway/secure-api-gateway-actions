@@ -32,8 +32,8 @@ endif
 	#mv ./${name}-*.tgz ./${name}-${version}.tgz
 
 publish_helm:
-	jf rt ping 
-	jf config s
+	jf rt ping
+	jf rt upload --dry-run ./*.tgz forgerock-helm/secure-api-gateway/secure-api-gateway-test-action/
 
 dev: clean
 	mvn install package -DskipTests=true -Dtag=latest -DgcrRepo=${repo} \
