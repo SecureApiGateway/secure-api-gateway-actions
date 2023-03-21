@@ -21,6 +21,5 @@ jobs:
        release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
        root_helm_directory: "_infra/helm/secure-api-gateway-test-actions-server"
     secrets:
-      FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
-      FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_HELM_ACCESS_TOKEN }}
+      FR_HELM_ACCESS_TOKEN: ${{ secrets.FR_HELM_ACCESS_TOKEN }}
       HELM_REPO: ${{ secrets.FR_HELM_REPO }}

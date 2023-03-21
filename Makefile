@@ -22,7 +22,7 @@ docker: clean
 	mvn install package dockerfile:build dockerfile:push -DskipTests=true -Dtag=${tag} \
 	  -DgcrRepo=${repo} --file secure-api-gateway-test-actions-server/pom.xml
 
-helm: clean
+package_helm: clean
 ifndef version
 	$(error A version must be supplied, Eg. make helm version=1.0.0)
 endif
@@ -30,6 +30,9 @@ endif
 	helm template _infra/helm/${name}
 	helm package _infra/helm/${name} --version ${version} --app-version ${version}
 	#mv ./${name}-*.tgz ./${name}-${version}.tgz
+
+publish_helm:
+	jf r
 
 dev: clean
 	mvn install package -DskipTests=true -Dtag=latest -DgcrRepo=${repo} \
