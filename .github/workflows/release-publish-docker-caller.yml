@@ -12,6 +12,9 @@ on:
         description: "Provide release version number"
         required: true
         type: string
+      release_tag_ref:
+        required: true
+        type: string
 env:
 #  GH_TOKEN: ${{ github.token }} # needed to gh cli commands
   GIT_AUTHOR_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
@@ -27,7 +30,7 @@ jobs:
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
-      release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
+      release_tag_ref: ${{ inputs.release_tag_ref }}
       SERVICE_NAME: secure-api-gateway-test-actions-server
     secrets:
       GCR_KEY: ${{ secrets.GCR_KEY }}
