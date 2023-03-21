@@ -15,6 +15,6 @@ COPY $JAR_FILE /app/test-actions-server.jar
 COPY docker/scripts/*.sh /app/
 
 RUN chown -R test:test /app
-USER tac
+USER test
 
 CMD ["java", "-jar", "test-actions-server.jar"]
