@@ -1,4 +1,4 @@
-name: caller_release_workflow
+name: caller_docker_workflow
 run-name: Create release '${{ inputs.release_version_number }}'
 on:
   workflow_dispatch:
