@@ -1,5 +1,5 @@
 name: publish_helm_caller
-run-name: Create release ${{ inputs.release_version_number }}
+run-name: Package and Publish Helm ${{ inputs.release_version_number }}
 on:
   push
 env:
