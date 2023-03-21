@@ -1,5 +1,5 @@
 name: caller_prepare_release_workflow
-run-name: Create release '${{ inputs.release_version_number }}'
+run-name: Release prepare '${{ inputs.release_version_number }}'
 on:
   workflow_dispatch:
     inputs:
