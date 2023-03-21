@@ -33,5 +33,5 @@ jobs:
       release_tag_ref: ${{ inputs.release_tag_ref }}
       SERVICE_NAME: secure-api-gateway-test-actions-server
     secrets:
-      GCR_KEY: ${{ secrets.GCR_KEY }}
+      GCR_KEY: ${{ secrets.GCR_CREDENTIALS_JSON }}
       RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
