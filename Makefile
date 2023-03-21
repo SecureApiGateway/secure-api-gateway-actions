@@ -32,7 +32,7 @@ endif
 	#mv ./${name}-*.tgz ./${name}-${version}.tgz
 
 publish_helm:
-	jf r
+	jf rf ping 
 
 dev: clean
 	mvn install package -DskipTests=true -Dtag=latest -DgcrRepo=${repo} \
