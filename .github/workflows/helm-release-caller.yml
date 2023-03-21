@@ -1,0 +1,26 @@
+name: publish_helm_caller
+run-name: Create release ${{ inputs.release_version_number }}
+on:
+  push
+env:
+#  GH_TOKEN: ${{ github.token }} # needed to gh cli commands
+  GIT_AUTHOR_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
+  GIT_AUTHOR_EMAIL: ${{ secrets.GIT_COMMIT_AUTHOR_EMAIL_BOT }}
+  GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
+  GIT_COMMITTER_EMAIL: ${{ secrets.GIT_COMMIT_AUTHOR_EMAIL_BOT }}
+  RELEASE_VERSION_NUMBER: "0.0.9"
+  RELEASE_TAG_REF: master
+
+jobs:
+  release_helm:
+    name: Call publish helm
+    # needs: [release_prepare, release_java, release_docker]
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-action-release-prepare-workflow
+    with:
+       release_version_number: $RELEASE_TAG_REF
+       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
+       root_helm_directory: "_infra/helm/secure-api-gateway-test-actions-server"
+    secrets:
+      FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
+      FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_HELM_ACCESS_TOKEN }}
+      HELM_REPO: ${{ secrets.FR_HELM_REPO }}
