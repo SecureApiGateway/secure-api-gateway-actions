@@ -1,4 +1,4 @@
-name: caller_prepare_release_workflow
+name: prepare_release_caller
 run-name: Release prepare '${{ inputs.release_version_number }}'
 on:
   workflow_dispatch:
