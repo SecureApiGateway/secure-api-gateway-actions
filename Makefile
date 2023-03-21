@@ -32,6 +32,9 @@ endif
 	#mv ./${name}-*.tgz ./${name}-${version}.tgz
 
 publish_helm:
+ifndef version
+	$(error A version must be supplied, Eg. make helm version=1.0.0)
+endif
 	jf rt ping
 	jf rt upload  ./*-${version}.tgz forgerock-helm/secure-api-gateway/secure-api-gateway-test-action/
 
