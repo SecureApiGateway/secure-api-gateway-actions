@@ -19,7 +19,7 @@ package:
 	mvn clean install package
 
 docker: clean
-	mvn package dockerfile:build -DskipTests=true -Dtag=${tag} \
+	mvn install package dockerfile:build dockerfile:push -DskipTests=true -Dtag=${tag} \
 	  -DgcrRepo=${repo} --file secure-api-gateway-test-actions-server/pom.xml
 
 helm: clean
