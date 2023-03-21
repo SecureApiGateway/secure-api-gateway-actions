@@ -1,5 +1,5 @@
-name: caller_docker_workflow
-run-name: Release Docker '${{ inputs.release_version_number }}' tag '${{ inputs.release_tag_ref }}'
+name: caller_java_workflow
+run-name: Release java '${{ inputs.release_version_number }}' tag '${{ inputs.release_tag_ref }}'
 on:
   workflow_dispatch:
     inputs:
@@ -24,13 +24,12 @@ env:
 
 jobs:
 
-  release_docker:
-    name: Call publish docker
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-action-release-prepare-workflow
+  release_java:
+    name: Call publish java
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ inputs.release_tag_ref }}
-      SERVICE_NAME: secure-api-gateway-test-actions-server
     secrets:
-      GCR_CREDENTIALS_JSON: ${{ secrets.GCR_CREDENTIALS_JSON }}
-      RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
+      FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
+      FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_ARTIFACTORY_TOKEN }}
