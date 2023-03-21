@@ -1,4 +1,4 @@
-name: caller_release_workflow
+name: caller_draft_and_pr_workflow
 run-name: Creates release Draft '${{ inputs.release_version_number }}' and PR
 on:
   workflow_dispatch:
