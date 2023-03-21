@@ -1,4 +1,4 @@
-name: caller_docker_workflow
+name: publish_docker_caller
 run-name: Release Docker '${{ inputs.release_version_number }}' tag '${{ inputs.release_tag_ref }}'
 on:
   workflow_dispatch:

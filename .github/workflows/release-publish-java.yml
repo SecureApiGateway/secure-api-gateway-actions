@@ -1,4 +1,4 @@
-name: caller_java_workflow
+name: publish_java_caller
 run-name: Release java '${{ inputs.release_version_number }}' tag '${{ inputs.release_tag_ref }}'
 on:
   workflow_dispatch:
