@@ -1,0 +1,91 @@
+apiVersion: {{ .Values.deployment.apiVersion }}
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.rollingUpdate.maxUnavailable }}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        appVersion: {{ .Chart.AppVersion }}
+        helmVersion: {{ .Chart.Version }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- if .Values.deployment.imageOverride.enabled }}
+          image: "{{ .Values.deployment.imageOverride.repo }}:{{ .Values.deployment.imageOverride.tag }}"
+          {{- else}}
+          image: "eu.gcr.io/sbat-gcr-release/securebanking/${{ .Chart.Name }}:{{ .Chart.AppVersion }}"
+          {{- end}}
+          imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
+          volumeMounts:
+            - name: rcs-signing
+              mountPath: /app/secrets
+              readOnly: true
+          ports:
+            - name: http-server
+              containerPort: {{ .Values.deployment.server.port }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ .Values.deployment.server.port }}
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ .Values.deployment.server.port }}
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          env:
+          - name: CONSENT_REPO_URI
+            valueFrom:
+              configMapKeyRef:
+                name: securebanking-platform-config
+                key: CONSENT_REPO_URI
+          - name: RS_API_URI
+            valueFrom:
+              configMapKeyRef:
+                name: securebanking-platform-config
+                key: RS_API_URI
+          - name: SERVER_PORT
+            value: {{ .Values.deployment.server.port | quote }}
+          - name: SPRING_PROFILES_ACTIVE
+            value: "docker"
+          - name: JAVA_OPTS
+            value: {{ .Values.deployment.java.opts }}
+          - name: RCS_CONSENT_RESPONSE_JWT_PRIVATEKEYPATH
+            value: /app/secrets/rcs-signing.key
+          - name: RCS_CONSENT_RESPONSE_JWT_SIGNINGKEYID
+            valueFrom:
+              configMapKeyRef:
+                name: securebanking-platform-config
+                key: RCS_CONSENT_RESPONSE_JWT_SIGNINGKEYID
+          - name: RCS_CONSENT_RESPONSE_JWT_ISSUER
+            valueFrom:
+              configMapKeyRef:
+                name: securebanking-platform-config
+                key: RCS_CONSENT_RESPONSE_JWT_ISSUER
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        - name: rcs-signing
+          secret:
+            secretName: rcs-signing
+            optional: false
