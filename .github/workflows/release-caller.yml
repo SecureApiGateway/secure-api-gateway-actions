@@ -44,7 +44,7 @@ jobs:
 
   release_docker:
     name: Call publish docker
-    needs: [release_prepare, release_java]
+    needs: [release_prepare]
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
@@ -56,7 +56,7 @@ jobs:
 
   release_helm:
     name: Call publish helm
-    needs: [release_prepare, release_java]
+    needs: [release_prepare]
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
