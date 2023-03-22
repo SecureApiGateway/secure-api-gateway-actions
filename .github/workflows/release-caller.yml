@@ -13,7 +13,6 @@ on:
         required: true
         type: string
 env:
-#  GH_TOKEN: ${{ github.token }} # needed to gh cli commands
   GIT_AUTHOR_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
   GIT_AUTHOR_EMAIL: ${{ secrets.GIT_COMMIT_AUTHOR_EMAIL_BOT }}
   GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
@@ -23,11 +22,10 @@ jobs:
 
   release_prepare: # prepare for a release in scm, creates the tag and release branch with the proper release versions
     name: Call release prepare
-    # uses: ./.github/workflows/release-prepare.yml # same repository
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
-    secrets: # inherit only when is the same repository
+    secrets:
       GPG_PRIVATE_KEY_BOT: ${{ secrets.GPG_PRIVATE_KEY_BOT }}
       GPG_KEY_PASSPHRASE_BOT: ${{ secrets.GPG_KEY_PASSPHRASE_BOT }}
       GIT_COMMIT_USERNAME_BOT: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
@@ -36,50 +34,44 @@ jobs:
   release_java:
     name: Call publish java
     needs: release_prepare
-    # uses: ./.github/workflows/release-prepare.yml # same repository
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
-    secrets: # inherit only when is the same repository
+    secrets:
       FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
       FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_ARTIFACTORY_TOKEN }}
 
   release_docker:
     name: Call publish docker
     needs: [release_prepare, release_java]
-    # needs: [release_prepare]
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
-      SERVICE_NAME: test-actions-app
+      SERVICE_NAME: secure-api-gateway-test-actions-server
     secrets:
       GCR_CREDENTIALS_JSON: ${{ secrets.GCR_CREDENTIALS_JSON }}
       RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
 
   release_helm:
     name: Call publish helm
-    # needs: [release_prepare, release_java, release_docker]
     needs: [release_prepare, release_java]
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-action-release-prepare-workflow
     with:
-       release_version_number: ${{ inputs.release_version_number }}
-       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
+      release_version_number: ${{ inputs.release_version_number }}
+      release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
+      root_helm_directory: "_infra/helm/secure-api-gateway-test-actions-server"
     secrets:
-      FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
-      FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_HELM_ACCESS_TOKEN }}
+      FR_HELM_ACCESS_TOKEN: ${{ secrets.FR_HELM_ACCESS_TOKEN }}
       HELM_REPO: ${{ secrets.FR_HELM_REPO }}
 
   release_draft_and_pr:
     name: Call publish draft and PR
     needs: [release_prepare, release_java, release_docker, release_helm]
-    #needs: [release_prepare, release_java, release_helm]
-    # uses: ./.github/workflows/release-prepare.yml # same repository
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-action-release-prepare-workflow
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_branch_ref: ${{ needs.release_prepare.outputs.release_branch_ref }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
       release_notes: ${{ inputs.notes }}
-      reviewer: jorgesanchezperez
