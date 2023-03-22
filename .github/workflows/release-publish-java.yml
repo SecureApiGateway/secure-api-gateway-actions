@@ -3,11 +3,6 @@ run-name: Release java '${{ inputs.release_version_number }}' tag '${{ inputs.re
 on:
   workflow_dispatch:
     inputs:
-      notes:
-        description: "Release notes"
-        required: false
-        type: string
-        default: ''
       release_version_number:
         description: "Provide release version number"
         required: true
@@ -16,11 +11,6 @@ on:
         description: "Release tag ref created by release prepare (usually with pattern v${release_version_number}"
         required: true
         type: string
-env:
-  GIT_AUTHOR_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
-  GIT_AUTHOR_EMAIL: ${{ secrets.GIT_COMMIT_AUTHOR_EMAIL_BOT }}
-  GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMIT_USERNAME_BOT }}
-  GIT_COMMITTER_EMAIL: ${{ secrets.GIT_COMMIT_AUTHOR_EMAIL_BOT }}
 
 jobs:
 

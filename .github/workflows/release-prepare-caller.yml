@@ -3,11 +3,6 @@ run-name: Release prepare '${{ inputs.release_version_number }}'
 on:
   workflow_dispatch:
     inputs:
-      notes:
-        description: "Release notes"
-        required: false
-        type: string
-        default: ''
       release_version_number:
         description: "Provide release version number"
         required: true
