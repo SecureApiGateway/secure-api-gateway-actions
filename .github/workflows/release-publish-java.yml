@@ -22,4 +22,4 @@ jobs:
       release_tag_ref: ${{ inputs.release_tag_ref }}
     secrets:
       FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
-      FR_ARTIFACTORY_TOKEN: ${{ secrets.FR_ARTIFACTORY_TOKEN }}
+      FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD: ${{ secrets.FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD }}
