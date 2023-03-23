@@ -30,11 +30,17 @@ jobs:
           architecture: x64
           cache: 'maven'
           server-id: ${{ env.MAVEN_SERVER_ID }} # Value of the distributionManagement/repository/id field of the pom.xml
-          server-username: ${{ secrets.FR_ARTIFACTORY_USER }} # env variable for username in deploy
-          server-password: ${{ secrets.FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD }} # env variable for token in deploy
+          server-username: FR_ARTIFACTORY_USER # env variable for username in deploy
+          server-password: FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD # env variable for token in deploy
 
       - name: Release snapshot package to forgerock maven snapshot repository
-        run: mvn -B deploy --file pom.xml
+        run: |
+          ls -al
+          cat ~/.m2/settings.xml 
+          mvn -B deploy --file pom.xml
+        env:
+          FR_ARTIFACTORY_USER: ${{ secrets.FR_ARTIFACTORY_USER }}
+          FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD: ${{ secrets.FR_ARTIFACTORY_USER_ENCRYPTED_PASSWORD }}
 
       - uses: codecov/codecov-action@v1
         with:
