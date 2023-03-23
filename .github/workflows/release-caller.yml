@@ -17,7 +17,7 @@ jobs:
 
   release_prepare: # prepare for a release in scm, creates the tag and release branch with the proper release versions
     name: Call release prepare
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare.yml@issue/812-release-actions-release-candidate-fix
     with:
       release_version_number: ${{ inputs.release_version_number }}
     secrets:
@@ -29,7 +29,7 @@ jobs:
   release_java:
     name: Call publish java
     needs: release_prepare
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@issue/812-release-actions-release-candidate-fix
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
@@ -40,7 +40,7 @@ jobs:
   release_docker:
     name: Call publish docker
     needs: [release_prepare]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-release-actions-release-candidate-fix
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
@@ -52,7 +52,7 @@ jobs:
   release_helm:
     name: Call publish helm
     needs: [release_prepare]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-release-actions-release-candidate-fix
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
@@ -64,7 +64,7 @@ jobs:
   release_draft_and_pr:
     name: Call publish draft and PR
     needs: [release_prepare, release_java, release_docker, release_helm]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-release-actions-release-candidate-fix
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_branch_ref: ${{ needs.release_prepare.outputs.release_branch_ref }}
