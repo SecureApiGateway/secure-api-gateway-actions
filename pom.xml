@@ -4,7 +4,7 @@
 
     <groupId>com.forgerock.sapi.gateway</groupId>
     <artifactId>secure-api-gateway-test-actions</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>6.0.0</version>
     <packaging>pom</packaging>
     <name>secure-api-gateway-test-actions</name>
 
@@ -88,7 +88,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/SecureApiGateway/secure-api-gateway-test-actions.git</url>
-        <tag>HEAD</tag>
+        <tag>v6.0.0</tag>
     </scm>
 
 </project>
