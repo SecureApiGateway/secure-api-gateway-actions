@@ -58,10 +58,8 @@ jobs:
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v3
-        id: checkout_release_branch
-        name: checkout release branch
         with:
-          ref: ${{ needs.release_prepare_no_maven.outputs.release_branch_ref }} # release branch
+          fetch-depth: 0
 
       # Creates a release draft from tag
       - name: Create github release draft
