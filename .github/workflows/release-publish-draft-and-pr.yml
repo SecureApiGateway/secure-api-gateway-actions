@@ -25,7 +25,7 @@ jobs:
 
   release_draft_and_pr:
     name: Call publish draft and PR
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_branch_ref: ${{ inputs.release_branch_ref }}

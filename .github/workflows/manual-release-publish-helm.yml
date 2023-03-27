@@ -15,7 +15,7 @@ on:
 jobs:
   release_helm:
     name: Call publish helm
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ inputs.release_tag_ref }}

@@ -20,7 +20,7 @@ jobs:
 
   release_prepare_no_maven: # prepare for a release in scm, creates the tag and release branch with the proper release versions
     name: Call release prepare
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare-no-maven.yml@issue/812-release-action-no-maven
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare-no-maven.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
     secrets:
@@ -30,7 +30,7 @@ jobs:
   release_docker:
     name: Call publish docker
     needs: [release_prepare_no_maven]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@issue/812-release-action-no-maven
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-docker.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }}
@@ -42,7 +42,7 @@ jobs:
   release_helm:
     name: Call publish helm
     needs: [release_prepare_no_maven]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@issue/812-release-action-no-maven
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-helm.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }}
@@ -54,28 +54,8 @@ jobs:
   release_draft:
     name: Call publish release draft
     needs: [release_prepare_no_maven, release_docker, release_helm]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-only.yml@issue/812-release-action-no-maven
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-only.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }}
       release_notes: ${{ inputs.notes }}
-
-
-#  release_publish_draft:
-#    name: Publish release draft
-#    needs: [release_prepare_no_maven, release_docker, release_helm]
-#    runs-on: ubuntu-latest
-#    steps:
-#      # https://github.com/actions/checkout
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      # Creates a release draft from tag
-#      - name: Create github release draft
-#        id: gh_release_draft
-#        run: |
-#          # Create a release from input tag
-#          gh release create  --draft \
-#          --verify-tag ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }} \
-#          --title "${{ inputs.release_version_number }}" --notes "${{ inputs.release_notes }}"
