@@ -69,5 +69,5 @@ jobs:
         run: |
           # Create a release from input tag
           gh release create  --draft \
-          --verify-tag ${{ inputs.release_tag_ref }} \
+          --verify-tag ${{ needs.release_prepare.outputs.release_tag_ref }} \
           --title "${{ inputs.release_version_number }}" --notes "${{ inputs.release_notes }}"
