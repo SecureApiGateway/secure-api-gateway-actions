@@ -60,4 +60,4 @@ jobs:
       release_branch_ref: ${{ needs.release_prepare_no_maven.outputs.release_branch_ref }}
       release_tag_ref: ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }}
       release_notes: ${{ inputs.notes }}
-      create_pr: false # skip
+      create_pr: false # skip create the pull request
