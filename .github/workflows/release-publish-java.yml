@@ -16,7 +16,7 @@ jobs:
 
   release_java:
     name: Call publish java
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@issue/812-action-release-prepare-workflow
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-java.yml@master
     with:
       release_version_number: ${{ inputs.release_version_number }}
       release_tag_ref: ${{ inputs.release_tag_ref }}
