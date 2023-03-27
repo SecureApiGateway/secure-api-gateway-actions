@@ -54,8 +54,10 @@ jobs:
   release_draft:
     name: Call publish release draft
     needs: [release_prepare_no_maven, release_docker, release_helm]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-only.yml@master
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-release-action-improvements
     with:
       release_version_number: ${{ inputs.release_version_number }}
-      release_tag_ref: ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }}
+      release_branch_ref: ${{ inputs.release_branch_ref }}
+      release_tag_ref: ${{ inputs.release_tag_ref }}
       release_notes: ${{ inputs.notes }}
+      create_pr: false # skip
