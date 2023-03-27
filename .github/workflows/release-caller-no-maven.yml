@@ -18,7 +18,7 @@ env:
 
 jobs:
 
-  release_prepare: # prepare for a release in scm, creates the tag and release branch with the proper release versions
+  release_prepare_no_maven: # prepare for a release in scm, creates the tag and release branch with the proper release versions
     name: Call release prepare
     uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-prepare-no-maven.yml@issue/812-release-action-no-maven
     with:
