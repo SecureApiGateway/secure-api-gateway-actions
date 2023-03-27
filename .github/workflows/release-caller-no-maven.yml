@@ -53,7 +53,7 @@ jobs:
 
   release_publish_draft:
     name: Publish release draft
-    needs: [release_prepare_no_maven]
+    needs: [release_prepare_no_maven, release_docker, release_helm]
     runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
