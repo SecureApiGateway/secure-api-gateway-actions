@@ -13,6 +13,9 @@ on:
         required: true
         type: string
 
+env:
+  GH_TOKEN: ${{ github.token }} # needed to run gh cli commands
+
 jobs:
 
   release_prepare: # prepare for a release in scm, creates the tag and release branch with the proper release versions
@@ -48,12 +51,23 @@ jobs:
       FR_ARTIFACTORY_USER_ACCESS_TOKEN: ${{ secrets.FR_ARTIFACTORY_USER_ACCESS_TOKEN }}
       FR_HELM_REPO: ${{ secrets.FR_HELM_REPO }}
 
-  release_draft_and_pr:
-    name: Call publish draft and PR
-    needs: [release_prepare, release_docker, release_helm]
-    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-and-pr.yml@issue/812-release-action-no-maven
-    with:
-      release_version_number: ${{ inputs.release_version_number }}
-      release_branch_ref: ${{ needs.release_prepare.outputs.release_branch_ref }}
-      release_tag_ref: ${{ needs.release_prepare.outputs.release_tag_ref }}
-      release_notes: ${{ inputs.notes }}
+  release_publish_draft:
+    name: Publish release draft
+    needs: [release_prepare]
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v3
+        id: checkout_release_branch
+        name: checkout release branch
+        with:
+          ref: ${{ needs.release_prepare.outputs.release_branch_ref }} # release branch
+
+      # Creates a release draft from tag
+      - name: Create github release draft
+        id: gh_release_draft
+        run: |
+          # Create a release from input tag
+          gh release create  --draft \
+          --verify-tag ${{ inputs.release_tag_ref }} \
+          --title "${{ inputs.release_version_number }}" --notes "${{ inputs.release_notes }}"
