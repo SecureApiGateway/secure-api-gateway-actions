@@ -51,21 +51,30 @@ jobs:
       FR_ARTIFACTORY_USER_ACCESS_TOKEN: ${{ secrets.FR_ARTIFACTORY_USER_ACCESS_TOKEN }}
       FR_HELM_REPO: ${{ secrets.FR_HELM_REPO }}
 
-  release_publish_draft:
-    name: Publish release draft
-    needs: [release_prepare_no_maven, release_docker, release_helm]
-    runs-on: ubuntu-latest
-    steps:
-      # https://github.com/actions/checkout
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  release_draft:
+    name: Call publish release draft
+    uses: SecureApiGateway/secure-api-gateway-parent/.github/workflows/release-publish-draft-only.yml@issue/812-release-action-no-maven
+    with:
+      release_version_number: ${{ inputs.release_version_number }}
+      release_tag_ref: ${{ inputs.release_tag_ref }}
+      release_notes: ${{ inputs.notes }}
 
-      # Creates a release draft from tag
-      - name: Create github release draft
-        id: gh_release_draft
-        run: |
-          # Create a release from input tag
-          gh release create  --draft \
-          --verify-tag ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }} \
-          --title "${{ inputs.release_version_number }}" --notes "${{ inputs.release_notes }}"
+
+#  release_publish_draft:
+#    name: Publish release draft
+#    needs: [release_prepare_no_maven, release_docker, release_helm]
+#    runs-on: ubuntu-latest
+#    steps:
+#      # https://github.com/actions/checkout
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      # Creates a release draft from tag
+#      - name: Create github release draft
+#        id: gh_release_draft
+#        run: |
+#          # Create a release from input tag
+#          gh release create  --draft \
+#          --verify-tag ${{ needs.release_prepare_no_maven.outputs.release_tag_ref }} \
+#          --title "${{ inputs.release_version_number }}" --notes "${{ inputs.release_notes }}"
