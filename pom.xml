@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,7 +13,7 @@
         <groupId>com.forgerock.sapi.gateway</groupId>
         <artifactId>secure-api-gateway-parent</artifactId>
         <version>0.9.0</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <modules>
@@ -24,7 +25,31 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <property.test.version>1.0.0</property.test.version>
         <java.version>14</java.version>
+        <uk.bom.version>0.9.0</uk.bom.version>
+        <openig.version>7.1.0</openig.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <!-- IG BOM -->
+            <dependency>
+                <groupId>org.forgerock.openig</groupId>
+                <artifactId>openig-bom</artifactId>
+                <!-- This version should be consistent
+                 with versions at other places -->
+                <version>${openig.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- Secure API Gateway commons BOM -->
+            <dependency>
+                <groupId>com.forgerock.sapi.gateway</groupId>
+                <artifactId>secure-api-gateway-ob-uk-common-bom</artifactId>
+                <version>${uk.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -78,6 +103,25 @@
             <name>Central Repository</name>
             <url>https://repo1.maven.org/maven2</url>
             <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>forgerock-private-releases</id>
+            <name>ForgeRock Private Releases Repository</name>
+            <url>https://maven.forgerock.org/repo/private-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>forgerock-private-releases-repo</id>
+            <name>repo</name>
+            <url>https://maven.forgerock.org/artifactory/repo</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
