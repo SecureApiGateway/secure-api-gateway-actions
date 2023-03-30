@@ -1,5 +1,5 @@
 name: merge-master-manual
-run-name: Release Helm '${{ inputs.release_version_number }}' tag '${{ inputs.release_tag_ref }}'
+run-name: Master
 
 on:
   workflow_dispatch:
@@ -25,6 +25,7 @@ jobs:
       - name: Get version
         id: get_version
         run: |
+          cat ~/.m2/settings.xml
           echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
           echo "MAVEN_SERVER_COMMUNITY=maven.forgerock.org-community" >> $GITHUB_ENV
         env:
